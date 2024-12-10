@@ -1,0 +1,17 @@
+package com.javaexpress.jobms.job.feignclients;
+
+import java.util.List;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.javaexpress.jobms.job.external.Review;
+
+@FeignClient(name="reviewms")
+public interface ReviewClient {
+
+	@GetMapping("/reviews?companyId")
+	public List<Review> getAllReviews(@RequestParam Long companyId) ;
+}

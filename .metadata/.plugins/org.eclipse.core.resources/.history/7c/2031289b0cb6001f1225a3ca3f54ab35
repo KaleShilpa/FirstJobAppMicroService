@@ -1,0 +1,19 @@
+spring.application.name=api-gateway
+server.port=8084
+
+#trace each and every request
+management.tracing.sampling.probability=1.0
+
+spring.cloud.gateway.routes[0].id=company-service
+spring.cloud.gateway.routes[0].uri=http://company:8081
+spring.cloud.gateway.routes[0].predicates[0]=Path=/companies/**
+
+spring.cloud.gateway.routes[1].id=job-service
+spring.cloud.gateway.routes[1].uri=http://job:8082
+spring.cloud.gateway.routes[1].predicates[0]=Path=/jobs/**
+
+spring.cloud.gateway.routes[2].id=review-service
+spring.cloud.gateway.routes[2].uri=http://review:8083
+spring.cloud.gateway.routes[2].predicates[0]=Path=/reviews/**
+
+management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans

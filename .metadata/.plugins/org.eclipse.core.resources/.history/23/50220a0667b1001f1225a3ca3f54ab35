@@ -1,0 +1,9 @@
+package com.javaexpress.jobms.job.dto;
+
+public class JobWithCompanyDTO {
+	
+	private Job job;
+	
+	private Company company;
+
+}

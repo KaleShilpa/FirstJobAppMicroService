@@ -1,0 +1,119 @@
+version :'3.6'
+
+ services:
+	
+  company:
+    image: kaleshilpa25/company
+    ports:
+     - 8081:8081    
+    environment:
+     - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb1:3306/companydb
+     - SPRING_DATASOURCE_USERNAME=root
+     - SPRING_DATASOURCE_PASSWORD=root123
+     - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+     - discovery-server
+     - config-server
+    networks:
+     - microservice-network
+     
+  job:
+    image: kaleshilpa25/job
+    ports:
+     - 8082:8082    
+    environment:
+     - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb2:3306/jobdb
+     - SPRING_DATASOURCE_USERNAME=root
+     - SPRING_DATASOURCE_PASSWORD=root123
+     - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - config-server
+    networks:
+     - microservice-network  
+  
+  review:
+    image: kaleshilpa25/review
+    ports:
+     - 8083:8083  
+    environment:
+     - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb3:3306/reviewdb
+     - SPRING_DATASOURCE_USERNAME=root
+     - SPRING_DATASOURCE_PASSWORD=root123
+     - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+     - discovery-server
+     - config-server
+  mysqldb1:
+    image: mysql:8.0.27
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=companydb
+    healthcheck:
+      test: ['CMD','mysqladmin','ping','-h','localhost']   
+      timeout: 20s
+      retries: 10
+  mysqldb2:
+    image: mysql:8.0.27
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=jobdb
+    healthcheck:
+      test: ['CMD','mysqladmin','ping','-h','localhost']   
+      timeout: 20s
+      retries: 10
+  mysqldb3:
+    image: mysql:8.0.27
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=reviewdb
+    healthcheck:
+      test: ['CMD','mysqladmin','ping','-h','localhost']   
+      timeout: 20s
+      retries: 10	  
+  config-server:
+    image: kaleshilpa25/config-server
+    ports:
+     - 8080:8080    
+    depends_on:
+     - discovery-server
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+    networks:
+     - microservice-network
+     
+  api-gateway:
+    image: kaleshilpa25/api-gateway
+    ports:
+     - 8084:8084
+    depends_on:
+     - discovery-server
+    networks:
+     - microservice-network
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+     
+  discovery-server:
+    image: kaleshilpa25/discovery-server
+    ports:
+     - 8761:8761    
+    depends_on:
+     - zipkin
+     - mysqldb1
+     - mysqldb2
+     - mysqldb3     
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+    networks:
+     - microservice-network
+     
+   zipkin:
+    image: openzipkin/zipkin
+    ports:
+     - 9411:9411
+    networks:
+     - microservice-network
+     
+   networks:
+    microservice-network:
+     driver: bridge

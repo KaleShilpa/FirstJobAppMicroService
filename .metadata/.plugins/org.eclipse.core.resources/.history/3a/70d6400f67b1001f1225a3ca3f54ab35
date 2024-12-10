@@ -1,0 +1,12 @@
+package com.javaexpress.jobms.job.dto;
+
+import com.javaexpress.jobms.job.bean.Job;
+import com.javaexpress.jobms.job.external.Company;
+
+public class JobWithCompanyDTO {
+	
+	private Job job;
+	
+	private Company company;
+
+}

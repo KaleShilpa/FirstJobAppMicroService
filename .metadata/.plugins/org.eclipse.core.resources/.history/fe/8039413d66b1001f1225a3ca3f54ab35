@@ -1,0 +1,5 @@
+package com.javaexpress.jobms.job.external;
+
+public class Company {
+
+}

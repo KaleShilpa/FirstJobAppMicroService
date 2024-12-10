@@ -1,0 +1,8 @@
+package com.javaexpress.jobms.job.feignclients;
+
+import org.springframework.cloud.openfeign.FeignClient;
+
+@FeignClient(name="companyms")
+public interface CompanyClient {
+
+}

@@ -1,0 +1,94 @@
+services:
+  company:
+    image: kaleshilpa25/company
+    ports:
+     - 8081:8081    
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - config-server
+    networks:
+     - microservice-network
+        
+  job:
+    image: kaleshilpa25/job
+    ports:
+     - 8082:8082    
+    environment:
+       - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - config-server
+    networks:
+     - microservice-network
+        
+  review:
+    image: kaleshilpa25/review
+    ports:
+     - 8083:8083    
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - config-server
+    networks:
+     - microservice-network 
+     
+  config-server:
+    image: kaleshilpa25/config-server
+    ports:
+     - 8080:8080    
+    depends_on:
+     - discovery-server
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+    networks:
+     - microservice-network
+     
+  api-gateway:
+    image: kaleshilpa25/api-gateway
+    ports:
+     - 8084:8084
+    depends_on:
+     - discovery-server
+    networks:
+     - microservice-network
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+     
+  discovery-server:
+    image: kaleshilpa25/discovery-server
+    ports:
+     - 8761:8761    
+    depends_on:
+     - zipkin
+     - mysqldb
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+    networks:
+     - microservice-network
+     
+  mysqldb:
+    image: mysql:8.0.27
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    environment:
+    - MYSQL_ROOT_PASSWORD=root123 
+    networks:
+     - microservice-network    
+    
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+     - 9411:9411
+    networks:
+     - microservice-network
+     
+networks:
+  microservice-network:
+    driver: bridge
+volumes:
+  mysqldb:
+    driver: local

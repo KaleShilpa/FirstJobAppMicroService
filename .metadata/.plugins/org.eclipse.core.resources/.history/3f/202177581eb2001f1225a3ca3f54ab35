@@ -1,0 +1,12 @@
+package com.javaexpress.jobms.job.feignclients;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.javaexpress.jobms.job.external.Company;
+
+@FeignClient(name="companyms")
+public interface CompanyClient {
+
+	public Company getComapnyById(@PathVariable Long id) ()
+}

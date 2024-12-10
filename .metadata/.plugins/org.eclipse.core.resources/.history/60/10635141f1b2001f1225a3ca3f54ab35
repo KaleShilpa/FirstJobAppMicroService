@@ -1,0 +1,22 @@
+spring.application.name=api-gateway
+server.port=8084
+
+#trace each and every request
+management.tracing.sampling.probability=1.0
+
+#Eureka Client
+#eureka.client.fetch-registry=false
+#eureka.client.register-with-eureka=false
+#eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+
+spring.cloud.gateway.routes[0].id=comapny-service
+spring.cloud.gateway.routes[0].uri=http://localhost:8081
+spring.cloud.gateway.routes[0].predicates[0]=Path=/companies/**
+
+spring.cloud.gateway.routes[1].id=comapny-service
+spring.cloud.gateway.routes[1].uri=lb://job-service
+spring.cloud.gateway.routes[1].predicates[0]=Path=/jobs/**
+
+spring.cloud.gateway.routes[2].id=comapny-service
+spring.cloud.gateway.routes[2].uri=http://localhost:8083
+spring.cloud.gateway.routes[2].predicates[0]=Path=/reviews/**

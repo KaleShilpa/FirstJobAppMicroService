@@ -1,0 +1,19 @@
+package com.javaexpress.jobms.job.service;
+
+import java.util.List;
+
+import com.javaexpress.jobms.job.bean.Job;
+
+public interface JobService {
+	
+	public List<Job> findAll();
+	
+	public Job createJob(Job job);
+	
+	public Job getJobById(Long id);
+	
+	public void deleteJobById(Long id);
+	
+	public boolean updateJobById(Long id, Job job);
+	
+}
